@@ -84,6 +84,13 @@ You should run this command periodically to refresh the list of banks available 
 
 Note that if you do not run this command, ``django-mollie-ideal`` will default to using its own list of supported banks. However, this may well already be out-of-date by the time you start using your application.
 
+If you are still testing, you can run the command in testmode to get
+the Mollie test bank instead of the list of real banks::
+
+    $ cd /path/to/your/django_app
+    $ python manage.py get_mollie_banklist --testmode
+
+
 Setup your URLs
 ===============
 
