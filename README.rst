@@ -136,7 +136,7 @@ You will also need to create a specialised form by subclassing ``MollieIdealPaym
             model = MyPayment
             fields = ('bank_id', 'amount', 'name', 'email')
 
-``MollieIdealPaymentForm`` subclasses ``django.forms.ModelForm``. This means that in your own form, you should take care to manually specify which fields from it you wish to display in addition to the custom fields from your own model. In the above example we're displaying ``bank_id`` and ``amount`` from ``MollieIdealPaymentForm`` and ``name`` and ``email`` from the ``MyPaymentForm`` subclass. You must display ``bank_id`` as a bare minimum. The Django ``ModelForm`` documentation_ is worth consulting for more detailed informtation on how to create forms from models.
+``MollieIdealPaymentForm`` subclasses ``django.forms.ModelForm``. This means that in your own form, you should take care to manually specify which fields from it you wish to display in addition to the custom fields from your own model. In the above example we're displaying ``bank_id`` and ``amount`` from ``MollieIdealPaymentForm`` and ``name`` and ``email`` from the ``MyPaymentForm`` subclass. You must display ``bank_id`` as a bare minimum. The Django ``ModelForm`` documentation_ is worth consulting for more detailed information on how to create forms from models.
 
 Note that Mollie require payments to be a minimum of €1.18 (€0.99 + BTW). Although ``MollieIdealPaymentForm`` already handles this for you, it is worth bearing in mind when you are pricing items on your site. 
 
