@@ -46,7 +46,8 @@ def get_mollie_bank_choices(testmode=MOLLIE_TEST, show_all_banks=False):
             banks = parsed_xml.getiterator('bank')
             choices = [(bank.findtext('bank_id'), bank.findtext('bank_name')) for bank in banks]
             if testmode or show_all_banks:
-                choices.append(test_bank)
+                if test_bank[0] not in [bank[0] for bank in choices]:
+                    choices.append(test_bank)
             choices.insert(0, empty_choice)
             return tuple(choices)
         except etree.XMLSyntaxError, error:
