@@ -47,6 +47,13 @@ class MollieIdealPayment(models.Model):
             ))
         parsed_xml = _get_mollie_xml(request_dict)
         order = parsed_xml.find('order')
+        if order is None:
+            # Most likely the reporturl points to localhost, which is
+            # an error.
+            if 'localhost' in reporturl or '127.0.0.1' in reporturl:
+                raise ValueError("reporturl must not point to localhost. "
+                                 "It must be reachable by mollie.nl.")
+            raise ValueError("No order found.")
         order_url = order.findtext('URL')
         self.transaction_id = order.findtext('transaction_id')
         self.save()
@@ -63,6 +70,10 @@ class MollieIdealPayment(models.Model):
         )
         parsed_xml = _get_mollie_xml(request_dict)
         order = parsed_xml.find('order')
+        if order is None:
+            # Most likely the reporturl or returnurl points to
+            # localhost, which is an error.
+            raise ValueError("No order found.")
         consumer = order.find('consumer')
         if consumer:
             self.consumer_account = consumer.findtext('consumerAccount')
