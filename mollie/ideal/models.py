@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from mollie.ideal.helpers import _get_mollie_xml, get_mollie_bank_choices
+
+logger = logging.getLogger('mollie.ideal')
+
 
 class MollieIdealPayment(models.Model):
 
@@ -48,6 +53,7 @@ class MollieIdealPayment(models.Model):
         parsed_xml = _get_mollie_xml(request_dict)
         order = parsed_xml.find('order')
         if order is None:
+            logger.error("No order found in xml.")
             # Most likely the reporturl points to localhost, which is
             # an error.
             if 'localhost' in reporturl or '127.0.0.1' in reporturl:
@@ -71,6 +77,8 @@ class MollieIdealPayment(models.Model):
         parsed_xml = _get_mollie_xml(request_dict)
         order = parsed_xml.find('order')
         if order is None:
+            logger.error("No order found in xml for transaction id %s.",
+                         self.transaction_id)
             # Most likely the reporturl or returnurl points to
             # localhost, which is an error.
             raise ValueError("No order found.")
@@ -80,7 +88,15 @@ class MollieIdealPayment(models.Model):
             self.consumer_city = consumer.findtext('consumerCity')
             self.consumer_name = consumer.findtext('consumerName')
         if order.findtext('payed') == 'true':
+            logger.info("Transaction %s is paid.", self.transaction_id)
             return True
+        message = order.findtext('message')
+        logger.error("Transaction id %s not paid. Message: %s",
+                     self.transaction_id, message)
+        status = order.findtext('status')
+        if status:
+            logger.error("Transaction id %s not paid. Status: %s",
+                         self.transaction_id, status)
         return False
 
     check = is_paid
