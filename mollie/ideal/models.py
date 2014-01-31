@@ -29,14 +29,20 @@ class MollieIdealPayment(models.Model):
         abstract = True
         verbose_name = _('Mollie/iDEAL payment')
 
-    def get_order_url(self):
+    def get_order_url(self, reporturl=None, returnurl=None):
         'Sets up a payment with Mollie.nl and returns an order URL.'
         if settings.MOLLIE_REVERSE_URLS:
-            reporturl = settings.MOLLIE_SITE_FULL_URL+reverse(settings.MOLLIE_REPORT_URL)
-            returnurl = settings.MOLLIE_SITE_FULL_URL+reverse(settings.MOLLIE_RETURN_URL)
+            if reporturl is None:
+                reporturl = settings.MOLLIE_SITE_FULL_URL + reverse(
+                    settings.MOLLIE_REPORT_URL)
+            if returnurl is None:
+                returnurl = settings.MOLLIE_SITE_FULL_URL + reverse(
+                    settings.MOLLIE_RETURN_URL)
         else:
-            reporturl = settings.MOLLIE_REPORT_URL
-            returnurl = settings.MOLLIE_RETURN_URL
+            if reporturl is None:
+                reporturl = settings.MOLLIE_REPORT_URL
+            if returnurl is None:
+                returnurl = settings.MOLLIE_RETURN_URL
         request_dict = dict(
             a = 'fetch',
             amount = int(self.amount * 100),
