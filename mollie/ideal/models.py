@@ -62,10 +62,11 @@ class MollieIdealPayment(models.Model):
             logger.error("No order found in xml.")
             # Most likely the reporturl points to localhost, which is
             # an error.
+            error = parsed_xml.findtext('error') or 'unknown'
             if 'localhost' in reporturl or '127.0.0.1' in reporturl:
                 raise ValueError("reporturl must not point to localhost. "
                                  "It must be reachable by mollie.nl.")
-            raise ValueError("No order found.")
+            raise ValueError("No order found. Error: %s" % (error,))
         order_url = order.findtext('URL')
         self.transaction_id = order.findtext('transaction_id')
         self.save()
