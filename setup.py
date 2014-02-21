@@ -21,5 +21,5 @@ setup(name='django-mollie-ideal',
                 'mollie.ideal',
                 'mollie.ideal.management',
                 'mollie.ideal.management.commands'],
-      data_files=[('mollie', ['ideal/mollie_banklist.xml'])]
+      data_files=[('mollie', ['mollie/ideal/mollie_banklist.xml'])]
       )
