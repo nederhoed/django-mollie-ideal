@@ -17,3 +17,9 @@ http://www.mollie.nl/support/documentatie/betaaldiensten/ideal/en/
 
 Full information and installation instructions can be found in
 README.rst
+
+NOTE: This is a Bitmymoney fork of the original django-mollie-ideal project,
+to make sure we do not receive unexpected (malicious or otherwise) changes
+and to have better control over availability. If you want to use this
+software for non-BMM projects, we strongly advise using the original
+project's code.
