@@ -17,13 +17,19 @@ class Command(BaseCommand):
             action='store_true',
             dest='testmode',
             default=False,
-            help=("Fetch the list in testmode.  This gets the test "
+            help=("Fetch the list in testmode. This gets the test "
                   "bank 'TBM Bank' (The Big Mollie Bank).")),
+        make_option(
+            '-t',
+            '--target',
+            dest='target_dir',
+            default='',
+            help=("Target dir for the XML file. For example `--target=/tmp/`")),
         )
 
     def handle(self, *args, **options):
         testmode = options['testmode']
-        here = os.path.realpath('.')
+        here = options['target_dir'] or os.path.realpath('.')
         url = '%s?a=banklist' % MOLLIE_API_URL
         if testmode:
             url += '&testmode=true'
