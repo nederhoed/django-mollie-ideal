@@ -27,7 +27,7 @@ def _get_mollie_xml(request_dict, base_url=MOLLIE_API_URL, testmode=MOLLIE_TEST)
     query = urllib.urlencode(request_dict)
     url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
     try:
-        xml = urllib2.urlopen(url)
+        xml = urllib2.urlopen(url, timeout=30)
     except (urllib2.HTTPError, urllib2.URLError), error:
         raise error
     parsed_xml = etree.parse(xml)
